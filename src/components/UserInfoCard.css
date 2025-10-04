@@ -1,0 +1,269 @@
+/* UserInfoCard Styles */
+.user-info-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.profile-picture {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.user-details {
+  flex: 1;
+}
+
+.username {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 5px 0;
+}
+
+.email {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 5px 0;
+}
+
+.joined-date {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* Usernames Section - Positioned to the right */
+.usernames-section {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  margin-top: -20px; /* Pull up to align with profile section */
+}
+
+.usernames-display {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 250px;
+}
+
+.username-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.username-item:last-child {
+  margin-bottom: 0;
+}
+
+.username-item strong {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  min-width: 80px;
+}
+
+/* Edit Form */
+.edit-form {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 300px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #58a6ff;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+}
+
+.input-group input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Buttons */
+.edit-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
+
+.save-btn, .edit-btn {
+  background: #58a6ff;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.save-btn:hover, .edit-btn:hover {
+  background: #4a8ee8;
+  transform: translateY(-1px);
+}
+
+.cancel-btn, .logout-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn:hover, .logout-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.logout-btn {
+  background: rgba(255, 107, 107, 0.1);
+  border-color: rgba(255, 107, 107, 0.3);
+  color: #ff6b6b;
+}
+
+.logout-btn:hover {
+  background: rgba(255, 107, 107, 0.2);
+  border-color: rgba(255, 107, 107, 0.4);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Large screens - usernames stay on the right */
+@media (min-width: 1025px) {
+  .usernames-section {
+    justify-content: flex-end;
+    margin-top: -20px;
+  }
+  
+  .usernames-display {
+    min-width: 250px;
+    max-width: 300px;
+  }
+}
+
+/* Medium screens - usernames below profile but right-aligned */
+@media (max-width: 1024px) {
+  .usernames-section {
+    justify-content: flex-end;
+    margin-top: 15px;
+  }
+  
+  .usernames-display {
+    min-width: 280px;
+  }
+}
+
+/* Small tablets - usernames full width */
+@media (max-width: 768px) {
+  .user-info-card {
+    gap: 15px;
+  }
+  
+  .usernames-section {
+    justify-content: flex-start;
+    margin-top: 15px;
+  }
+  
+  .usernames-display, .edit-form {
+    min-width: 100%;
+  }
+  
+  .profile-section {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .user-details {
+    min-width: 200px;
+  }
+  
+  .action-buttons, .edit-buttons {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-section {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+  
+  .usernames-section {
+    justify-content: center;
+    margin-top: 0;
+  }
+  
+  .usernames-display, .edit-form {
+    min-width: 100%;
+  }
+  
+  .action-buttons, .edit-buttons {
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .save-btn, .edit-btn, .cancel-btn, .logout-btn {
+    flex: 1;
+    min-width: 100px;
+  }
+}
