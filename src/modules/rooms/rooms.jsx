@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './rooms.css';
 import { useUser } from '../../contexts/useUser';
+import { roomsAPI } from '../../services/api';
 
 const Rooms = () => {
     const { userData, isAuthenticated } = useUser();
@@ -20,8 +21,7 @@ const Rooms = () => {
         
         try {
             setLoading(true);
-            const response = await fetch(`http://localhost:5000/api/rooms/user/${userData.auth0Id}`);
-            const data = await response.json();
+            const data = await roomsAPI.getUserRooms(userData.auth0Id);
             
             if (data.success) {
                 setRooms(data.rooms);
@@ -40,15 +40,7 @@ const Rooms = () => {
     const createRoom = async (roomData) => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:5000/api/rooms', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(roomData)
-            });
-            
-            const data = await response.json();
+            const data = await roomsAPI.create(roomData);
             
             if (data.success) {
                 setRooms([data.room, ...rooms]);
@@ -73,25 +65,23 @@ const Rooms = () => {
         try {
             console.log('DEBUG: Fetching leaderboard for room:', roomId);
             // Try to fetch from backend first
-            const response = await fetch(`http://localhost:5000/api/rooms/${roomId}/leaderboard`);
+            const data = await roomsAPI.getLeaderboard(roomId);
             
-            if (response.ok) {
-                const data = await response.json();
+            if (data.success) {
                 console.log('DEBUG: Leaderboard data received from backend:', data);
                 // Check if GitHub stats are in the backend data
                 data.leaderboard.forEach(participant => {
                     console.log(`DEBUG: ${participant.name} backend stats:`, participant.stats);
                     console.log(`DEBUG: ${participant.name} backend GitHub commits:`, participant.stats?.github?.totalCommits);
                 });
-                if (data.success) {
-                    // Use backend data directly - backend already calculated scores and sorted
-                    console.log('DEBUG: Using backend leaderboard with pre-calculated scores');
-                    console.log('DEBUG: Backend leaderboard:', data.leaderboard);
-                    
-                    // Backend already provides sorted leaderboard with totalScore and rank
-                    setLeaderboard(data.leaderboard);
-                    return;
-                }
+                
+                // Use backend data directly - backend already calculated scores and sorted
+                console.log('DEBUG: Using backend leaderboard with pre-calculated scores');
+                console.log('DEBUG: Backend leaderboard:', data.leaderboard);
+                
+                // Backend already provides sorted leaderboard with totalScore and rank
+                setLeaderboard(data.leaderboard);
+                return;
             }
             
             // If backend fails, show empty leaderboard - all data should come from backend
@@ -229,17 +219,7 @@ const Rooms = () => {
         
         try {
             setLoading(true);
-            const response = await fetch(`http://localhost:5000/api/rooms/${roomId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    auth0Id: userData.auth0Id
-                })
-            });
-            
-            const data = await response.json();
+            const data = await roomsAPI.delete(roomId, userData.auth0Id);
             
             if (data.success) {
                 // Remove room from state
@@ -292,8 +272,7 @@ const Rooms = () => {
             setLoading(true);
             
             // First get room by code
-            const roomResponse = await fetch(`http://localhost:5000/api/rooms/code/${code}`);
-            const roomData = await roomResponse.json();
+            const roomData = await roomsAPI.getByCode(code);
             
             if (!roomData.success) {
                 setError('Room not found with that code');
@@ -308,15 +287,7 @@ const Rooms = () => {
                 picture: userData.picture
             };
 
-            const joinResponse = await fetch(`http://localhost:5000/api/rooms/${roomData.room._id}/join`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ participant })
-            });
-            
-            const joinData = await joinResponse.json();
+            const joinData = await roomsAPI.join(roomData.room._id, participant);
             
             if (joinData.success) {
                 // Add room to local state if not already present

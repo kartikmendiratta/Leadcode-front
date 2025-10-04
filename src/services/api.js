@@ -97,6 +97,11 @@ export const roomsAPI = {
   // Get user's rooms
   getUserRooms: async (auth0Id, type = 'all') => {
     return apiCall(`/rooms/user/${auth0Id}?type=${type}`);
+  },
+
+  // Get room leaderboard
+  getLeaderboard: async (roomId) => {
+    return apiCall(`/rooms/${roomId}/leaderboard`);
   }
 };
 
