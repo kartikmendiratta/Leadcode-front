@@ -1,4 +1,5 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://leadcode-back.vercel.app/api';
+// const API_BASE_URL = 'http://localhost:5000/api'; // For local development
 
 // Generic API call function with better error handling
 const apiCall = async (endpoint, options = {}) => {
