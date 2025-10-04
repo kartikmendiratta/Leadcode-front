@@ -8,9 +8,9 @@ import Rooms from './modules/rooms/rooms'
 import Profile from './modules/profile/profile'
 import Dashboard from './modules/dashboard/dashboard'
 
-// Auth0 configuration - consider moving to environment variables for production
-const domain = "dev-ibqrxmw4sbqd01ni.us.auth0.com";
-const clientId = "9pbiIyaFvjbNOXHF018gDqVogqL9dgEW";
+// Auth0 configuration - using environment variables
+const domain = import.meta.env.VITE_AUTH0_DOMAIN;
+const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
