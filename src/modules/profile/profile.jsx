@@ -4,7 +4,6 @@ import { useUser } from "../../contexts/useUser";
 import UserInfoCard from "../../components/UserInfoCard";
 import LeetCodeStats from "../../components/LeetCodeStats";
 import GitHubStats from "../../components/GitHubStats";
-import './profile.css';
 
 export default function Profile() {
   const { user: auth0User } = useAuth0();
@@ -124,29 +123,21 @@ export default function Profile() {
   };
 
   return (
-  <div className="profile-page">
-      <div className="profile-content">
+  <div className="min-h-screen p-4 md:p-8 bg-[#e0e0e1] box-border">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="profile-header">
-          <h1 className="profile-title">Profile</h1>
-          <p className="profile-subtitle">{user.displayName || user.email}</p>
+        <div className="text-center mb-10">
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900">Profile</h1>
+          <p className="mt-3 text-slate-600 text-lg">{user.displayName || user.email}</p>
         </div>
 
         {/* Error Messages */}
         {error && (
-          <div className="error-message">
+          <div className="p-4 rounded-lg mb-5 text-white font-medium bg-red-600 flex justify-between items-center">
             {error}
             <button 
               onClick={() => setError(null)}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'inherit',
-                cursor: 'pointer',
-                float: 'right',
-                fontSize: '18px',
-                fontWeight: 'bold'
-              }}
+              className="bg-transparent border-none text-white cursor-pointer text-lg font-bold hover:opacity-80"
             >
               ×
             </button>
@@ -154,20 +145,20 @@ export default function Profile() {
         )}
         
         {saving && (
-          <div className="success-message">
+          <div className="p-4 rounded-lg mb-5 text-white font-medium bg-green-600">
             Saving profile...
           </div>
         )}
 
         {/* Profile Grid */}
-        <div className="profile-grid">
-          {/* User Info Card */}
-          <div className="profile-card">
-            <div className="card-title">
-              <span className="card-icon">👤</span>
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-7">
+          {/* User Info Card - Dark Theme */}
+          <div className="flex flex-col bg-gray-800 rounded-xl border border-gray-700 shadow-lg overflow-hidden h-full">
+            <div className="p-4 bg-gray-900/85 border-b border-white/10 text-white font-semibold text-lg flex items-center gap-2">
+              <span className="text-xl">👤</span>
               Account Details
             </div>
-            <div className="card-content">
+            <div className="p-6 bg-transparent text-slate-50">
               <UserInfoCard 
                 user={user} 
                 onEdit={handleUserEdit}
@@ -177,12 +168,12 @@ export default function Profile() {
           </div>
 
           {/* LeetCode Stats Card */}
-          <div className="profile-card">
-            <div className="card-title">
-              <span className="card-icon">🏆</span>
+          <div className="flex flex-col bg-white rounded-xl border border-slate-200 shadow-lg overflow-hidden h-full">
+            <div className="p-4 bg-slate-900 text-white font-semibold text-lg flex items-center gap-2">
+              <span className="text-xl">🏆</span>
               LeetCode Progress
             </div>
-            <div className="card-content">
+            <div className="p-6 bg-white text-gray-800">
               <LeetCodeStats 
                 stats={leetcodeStats}
                 loading={loading}
@@ -193,12 +184,12 @@ export default function Profile() {
           </div>
 
           {/* GitHub Stats Card */}
-          <div className="profile-card">
-            <div className="card-title">
-              <span className="card-icon">⚡</span>
+          <div className="flex flex-col bg-white rounded-xl border border-slate-200 shadow-lg overflow-hidden h-full">
+            <div className="p-4 bg-slate-900 text-white font-semibold text-lg flex items-center gap-2">
+              <span className="text-xl">⚡</span>
               GitHub Activity
             </div>
-            <div className="card-content">
+            <div className="p-6 bg-white text-gray-800">
               <GitHubStats 
                 stats={githubStats}
                 loading={githubLoading}

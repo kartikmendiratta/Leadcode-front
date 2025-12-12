@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import './rooms.css';
 import { useUser } from '../../contexts/useUser';
 import { roomsAPI } from '../../services/api';
 
@@ -381,58 +380,66 @@ const Rooms = () => {
 
     if (!isAuthenticated) {
         return (
-            <div className="rooms-container">
-                <div className="rooms-header">
-                    <h1>Please log in to access rooms</h1>
+            <div className="max-w-7xl mx-auto p-5">
+                <div className="flex justify-between items-center mb-8">
+                    <h1 className="text-3xl font-bold text-green-500 m-0">Please log in to access rooms</h1>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="rooms-container">
-            <div className="rooms-header">
-                <h1>My Rooms</h1>
-                <div className="header-buttons">
-                    <button className="join-room-btn" onClick={handleJoinRoom} disabled={loading}>
+        <div className="max-w-7xl mx-auto p-5">
+            <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+                <h1 className="text-3xl font-bold text-green-500 m-0">My Rooms</h1>
+                <div className="flex gap-3">
+                    <button 
+                        className="px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed bg-green-600 text-white hover:bg-green-700" 
+                        onClick={handleJoinRoom} 
+                        disabled={loading}
+                    >
                         Join Room
                     </button>
-                    <button className="add-room-btn" onClick={handleAddRoom} disabled={loading}>
+                    <button 
+                        className="px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed bg-blue-600 text-white hover:bg-blue-700" 
+                        onClick={handleAddRoom} 
+                        disabled={loading}
+                    >
                         {loading ? 'Loading...' : 'Create Room'}
                     </button>
                 </div>
             </div>
 
             {error && (
-                <div className="error-message">
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 flex justify-between items-center">
                     {error}
-                    <button onClick={() => setError(null)}>×</button>
+                    <button onClick={() => setError(null)} className="text-red-700 font-bold hover:text-red-900">×</button>
                 </div>
             )}
 
-            <div className="rooms-content">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Rooms List */}
-                <div className="rooms-list">
-                    <h3>Your Rooms ({rooms.length})</h3>
+                <div className="lg:col-span-1 bg-white rounded-xl shadow-md p-5 h-fit">
+                    <h3 className="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Your Rooms ({rooms.length})</h3>
                     {rooms.length === 0 ? (
-                        <div className="no-rooms">
+                        <div className="text-gray-500 text-center py-8 italic">
                             <p>No rooms yet. Create your first room!</p>
                         </div>
                     ) : (
                         rooms.map((room) => (
                             <div 
                                 key={room._id} 
-                                className={`room-card ${selectedRoom?._id === room._id ? 'active' : ''}`}
+                                className={`bg-gray-50 border border-gray-200 rounded-lg p-4 mb-3 cursor-pointer transition-all hover:shadow-md hover:border-blue-300 relative ${selectedRoom?._id === room._id ? 'border-blue-500 bg-blue-50 shadow-md ring-1 ring-blue-500' : ''}`}
                             >
-                                <div className="room-card-content" onClick={() => handleRoomClick(room)}>
-                                    <h4>{room.name}</h4>
-                                    <p>Code: {room.roomCode}</p>
-                                    <p>Participants: {room.participantCount}</p>
-                                    {isCreator(room) && <span className="creator-badge">Created by you</span>}
+                                <div className="pr-8" onClick={() => handleRoomClick(room)}>
+                                    <h4 className="font-bold text-lg text-gray-800 mb-1">{room.name}</h4>
+                                    <p className="text-sm text-gray-600 mb-1">Code: {room.roomCode}</p>
+                                    <p className="text-sm text-gray-600 mb-1">Participants: {room.participantCount}</p>
+                                    {isCreator(room) && <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mt-2">Created by you</span>}
                                 </div>
                                 {isCreator(room) && (
                                     <button 
-                                        className="delete-room-btn"
+                                        className="absolute top-3 right-3 text-gray-400 hover:text-red-500 p-1 rounded hover:bg-red-50 transition-colors"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             deleteRoom(room._id);
@@ -449,73 +456,76 @@ const Rooms = () => {
                 </div>
 
                 {/* Leaderboard */}
-                <div className="leaderboard-section">
+                <div className="lg:col-span-2 bg-white rounded-xl shadow-md p-6 min-h-[400px]">
                     {selectedRoom ? (
                         <>
-                            <div className="leaderboard-header-section">
-                                <h3>{selectedRoom.name} - Leaderboard</h3>
-                                <div className="leaderboard-actions">
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b pb-4 gap-4">
+                                <h3 className="text-2xl font-bold text-gray-800">{selectedRoom.name} - Leaderboard</h3>
+                                <div className="flex gap-2">
                                     <button 
-                                        className="btn btn-secondary"
+                                        className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm flex items-center gap-2 transition-colors disabled:opacity-60"
                                         onClick={refreshAllStats}
                                         disabled={loading || !userData}
                                         title="Refresh your stats in the database and update leaderboard"
                                     >
-                                        � Refresh My Stats
+                                        🔄 Refresh My Stats
                                     </button>
                                 </div>
                             </div>
                             {leaderboard.length === 0 ? (
-                                <div className="no-leaderboard">
-                                    <p>No participants with stats yet.</p>
-                                    <p>Share room code: <strong>{selectedRoom.roomCode}</strong></p>
+                                <div className="text-center py-12 text-gray-500">
+                                    <p className="mb-2">No participants with stats yet.</p>
+                                    <p>Share room code: <strong className="text-gray-800 bg-gray-100 px-2 py-1 rounded">{selectedRoom.roomCode}</strong></p>
                                 </div>
                             ) : (
-                                <div className="leaderboard">
-                                    <div className="leaderboard-header">
-                                        <div>Rank</div>
-                                        <div>Player</div>
-                                        <div>LeetCode</div>
-                                        <div>GitHub</div>
-                                        <div>Score</div>
-                                    </div>
-                                    
-                                    {leaderboard.map((participant) => {
-                                        // Debug log for each participant's stats in render
-                                        console.log(`RENDER DEBUG: ${participant.name} stats:`, participant.stats);
-                                        console.log(`RENDER DEBUG: ${participant.name} GitHub commits:`, participant.stats?.github?.totalCommits);
-                                        
-                                        return (
-                                        <div key={participant.auth0Id} className="leaderboard-row">
-                                            <div className="rank">#{participant.rank}</div>
-                                            <div className="player">
-                                                {participant.picture && (
-                                                    <img 
-                                                        src={participant.picture} 
-                                                        alt={participant.name}
-                                                        onError={(e) => {
-                                                            console.log('Participant image failed to load');
-                                                            e.target.style.display = 'none';
-                                                        }}
-                                                    />
-                                                )}
-                                                <span>{participant.name}</span>
-                                            </div>
-                                            <div className="leetcode">
-                                                {participant.stats?.leetcode?.total || 0} problems
-                                            </div>
-                                            <div className="github">
-                                                {participant.stats?.github?.totalCommits || 0} commits
-                                            </div>
-                                            <div className="score">{participant.totalScore} pts</div>
+                                <div className="w-full overflow-x-auto">
+                                    <div className="min-w-[600px]">
+                                        <div className="grid grid-cols-12 gap-4 font-semibold text-gray-500 text-sm uppercase tracking-wider border-b pb-3 mb-3 px-2">
+                                            <div className="col-span-1">Rank</div>
+                                            <div className="col-span-5">Player</div>
+                                            <div className="col-span-2">LeetCode</div>
+                                            <div className="col-span-2">GitHub</div>
+                                            <div className="col-span-2 text-right">Score</div>
                                         </div>
-                                        );
-                                    })}
+                                        
+                                        {leaderboard.map((participant) => {
+                                            // Debug log for each participant's stats in render
+                                            console.log(`RENDER DEBUG: ${participant.name} stats:`, participant.stats);
+                                            console.log(`RENDER DEBUG: ${participant.name} GitHub commits:`, participant.stats?.github?.totalCommits);
+                                            
+                                            return (
+                                            <div key={participant.auth0Id} className="grid grid-cols-12 gap-4 items-center py-3 px-2 border-b border-gray-100 hover:bg-gray-50 transition-colors rounded-lg">
+                                                <div className="col-span-1 font-bold text-gray-400">#{participant.rank}</div>
+                                                <div className="col-span-5 flex items-center gap-3 font-medium text-gray-800">
+                                                    {participant.picture && (
+                                                        <img 
+                                                            src={participant.picture} 
+                                                            alt={participant.name}
+                                                            className="w-8 h-8 rounded-full object-cover border border-gray-200"
+                                                            onError={(e) => {
+                                                                console.log('Participant image failed to load');
+                                                                e.target.style.display = 'none';
+                                                            }}
+                                                        />
+                                                    )}
+                                                    <span className="truncate">{participant.name}</span>
+                                                </div>
+                                                <div className="col-span-2 text-sm text-gray-600">
+                                                    {participant.stats?.leetcode?.total || 0} problems
+                                                </div>
+                                                <div className="col-span-2 text-sm text-gray-600">
+                                                    {participant.stats?.github?.totalCommits || 0} commits
+                                                </div>
+                                                <div className="col-span-2 font-bold text-blue-600 text-right">{participant.totalScore} pts</div>
+                                            </div>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             )}
                         </>
                     ) : (
-                        <div className="no-room-selected">
+                        <div className="flex items-center justify-center h-full text-gray-400 text-xl font-medium min-h-[300px]">
                             <h3>Select a room to view its leaderboard</h3>
                         </div>
                     )}
@@ -524,17 +534,17 @@ const Rooms = () => {
 
             {/* Create Room Modal */}
             {showCreateModal && (
-                <div className="modal-overlay" onClick={handleCloseModal}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <div className="modal-header">
-                            <h2>Create New Room</h2>
-                            <button className="close-btn" onClick={handleCloseModal}>
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={handleCloseModal}>
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200" onClick={(e) => e.stopPropagation()}>
+                        <div className="bg-gray-50 px-6 py-4 border-b flex justify-between items-center">
+                            <h2 className="text-xl font-bold text-gray-800 m-0">Create New Room</h2>
+                            <button className="text-gray-400 hover:text-gray-600 text-2xl leading-none" onClick={handleCloseModal}>
                                 &times;
                             </button>
                         </div>
-                        <form onSubmit={handleSubmit}>
-                            <div className="form-group">
-                                <label htmlFor="roomName">Room Name:</label>
+                        <form onSubmit={handleSubmit} className="p-6">
+                            <div className="mb-6">
+                                <label htmlFor="roomName" className="block text-sm font-medium text-gray-700 mb-2">Room Name:</label>
                                 <input
                                     type="text"
                                     id="roomName"
@@ -542,13 +552,14 @@ const Rooms = () => {
                                     onChange={(e) => setRoomName(e.target.value)}
                                     placeholder="Enter room name"
                                     required
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                                 />
                             </div>
-                            <div className="modal-actions">
-                                <button type="button" onClick={handleCloseModal} disabled={loading}>
+                            <div className="flex justify-end gap-3">
+                                <button type="button" onClick={handleCloseModal} disabled={loading} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
                                     Cancel
                                 </button>
-                                <button type="submit" disabled={loading}>
+                                <button type="submit" disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
                                     {loading ? 'Creating...' : 'Create Room'}
                                 </button>
                             </div>
@@ -559,17 +570,17 @@ const Rooms = () => {
 
             {/* Join Room Modal */}
             {showJoinModal && (
-                <div className="modal-overlay" onClick={handleCloseJoinModal}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <div className="modal-header">
-                            <h2>Join Room</h2>
-                            <button className="close-btn" onClick={handleCloseJoinModal}>
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={handleCloseJoinModal}>
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200" onClick={(e) => e.stopPropagation()}>
+                        <div className="bg-gray-50 px-6 py-4 border-b flex justify-between items-center">
+                            <h2 className="text-xl font-bold text-gray-800 m-0">Join Room</h2>
+                            <button className="text-gray-400 hover:text-gray-600 text-2xl leading-none" onClick={handleCloseJoinModal}>
                                 &times;
                             </button>
                         </div>
-                        <form onSubmit={handleJoinSubmit}>
-                            <div className="form-group">
-                                <label htmlFor="joinCode">Room Code:</label>
+                        <form onSubmit={handleJoinSubmit} className="p-6">
+                            <div className="mb-6">
+                                <label htmlFor="joinCode" className="block text-sm font-medium text-gray-700 mb-2">Room Code:</label>
                                 <input
                                     type="text"
                                     id="joinCode"
@@ -579,14 +590,15 @@ const Rooms = () => {
                                     required
                                     maxLength="6"
                                     style={{ textTransform: 'uppercase', letterSpacing: '2px' }}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                                 />
-                                <small>Room codes are 6 characters long (e.g., ABC123)</small>
+                                <small className="text-gray-500 mt-1 block">Room codes are 6 characters long (e.g., ABC123)</small>
                             </div>
-                            <div className="modal-actions">
-                                <button type="button" onClick={handleCloseJoinModal} disabled={loading}>
+                            <div className="flex justify-end gap-3">
+                                <button type="button" onClick={handleCloseJoinModal} disabled={loading} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
                                     Cancel
                                 </button>
-                                <button type="submit" disabled={loading || joinCode.length !== 6}>
+                                <button type="submit" disabled={loading || joinCode.length !== 6} className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
                                     {loading ? 'Joining...' : 'Join Room'}
                                 </button>
                             </div>

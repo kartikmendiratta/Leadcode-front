@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
-import './App.css'
 import { Auth0Provider, useAuth0 } from '@auth0/auth0-react'
 import { UserProvider } from './contexts/UserContext'
 import Login from './modules/login/login'
